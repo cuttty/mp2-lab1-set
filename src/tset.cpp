@@ -1,4 +1,4 @@
-/ ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
+// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
 //
 // tset.cpp - Copyright (c) Гергель В.П. 04.10.2001
 //   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (19.04.2015)
@@ -37,7 +37,7 @@ int TSet::GetMaxPower(void) const // получить макс. к-во эл-т�
 
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
-    if (Elem < 0  Elem >= MaxPower) throw "Wrong index";
+    if (Elem < 0  || Elem >= MaxPower) throw "Wrong index";
 
     if (Elem >= 0 && Elem < MaxPower) return BitField.GetBit(Elem);
     else return 0;
@@ -45,7 +45,7 @@ int TSet::IsMember(const int Elem) const // элемент множества?
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
-    if (Elem < 0  Elem >= MaxPower) throw "Wrong index";
+    if (Elem < 0 || Elem >= MaxPower) throw "Wrong index";
 
     if (Elem >= 0 && Elem < MaxPower) BitField.SetBit(Elem);
 }
