@@ -44,10 +44,7 @@ TELEM TBitField::GetMemMask(const int n) const // битовая маска дл
 {
     TELEM res;
 
-    if ((n < 0) || (n > BitLen)) throw "Wrong index";
-
-    if (n < sizeof(TELEM) * 8) res = 1 << (sizeof(TELEM) * 8 - n - 1);
-    else  res = 0;
+     res = TELEM(1) << (sizeof(TELEM) * 8 - n - 1);
 
     return res;
 }
@@ -136,6 +133,14 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 
     for (int i = 0; i < std::min(MemLen, bf.MemLen); i++)
         res.pMem[i] = pMem[i] | bf.pMem[i];
+
+    if (MemLen > bf.MemLen)
+        for (int i = std::min(MemLen, bf.MemLen); i < std::max(MemLen, bf.MemLen); i++)
+            res.pMem[i] = pMem[i];
+    else
+        for (int i = std::min(MemLen, bf.MemLen); i < std::max(MemLen, bf.MemLen); i++)
+            res.pMem[i] = bf.pMem[i];
+
 
     return res;
 }
