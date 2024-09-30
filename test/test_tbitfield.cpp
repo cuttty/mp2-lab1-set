@@ -376,3 +376,33 @@ TBitField res2 = bf1 & bf2;
 
 EXPECT_EQ(res1, res2);
 }
+TEST(TBitField, test_otric)
+{
+const int size = 2;
+TBitField bf1(size), bf2(size);
+
+bf1.SetBit(0);
+bf2 = ~bf1;
+
+EXPECT_EQ(1, bf1.GetBit(0));
+EXPECT_EQ(0, bf1.GetBit(1));
+EXPECT_EQ(0, bf2.GetBit(0));
+EXPECT_EQ(1, bf2.GetBit(1));
+}
+
+TEST(TBitField, test_otric_2)
+{
+const int size = 3;
+TBitField bf1(size), bf2(size);
+
+bf1.SetBit(0);
+bf1.SetBit(2);
+bf2 = ~bf1;
+
+EXPECT_EQ(1, bf1.GetBit(0));
+EXPECT_EQ(0, bf1.GetBit(1));
+EXPECT_EQ(1, bf1.GetBit(2));
+EXPECT_EQ(0, bf2.GetBit(0));
+EXPECT_EQ(1, bf2.GetBit(1));
+EXPECT_EQ(0, bf2.GetBit(2));
+}

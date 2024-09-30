@@ -10,7 +10,7 @@
 TBitField::TBitField(int len)
 {
     BitLen = len;
-    MemLen = (len + 31) / 32;
+    MemLen = (len + sizeof(TELEM) - 1) / sizeof(TELEM);
     pMem = new TELEM[MemLen];
     for (int i = 0; i < MemLen; i++) {
         pMem[i] = 0;
@@ -37,7 +37,7 @@ TBitField::~TBitField()
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
 {
-    return n / 32;
+    return n / sizeof(TELEM);
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
@@ -157,17 +157,30 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~(void) // отрицание
 {
+    /*TBitField result(BitLen);
+
+    for (int i = 0; i < MemLen; i++)
+        result.pMem[i] = ~pMem[i];
+
+    TELEM lastBits = BitLen % (sizeof(TELEM) * 8);
+
+    if (lastBits) {
+        TELEM mask = (1 << lastBits) - TELEM(1);
+        result.pMem[MemLen - 1] &= mask;
+    }
+
+    return result;*/
+
     TBitField result(BitLen);
 
     for (int i = 0; i < MemLen; i++)
         result.pMem[i] = ~pMem[i];
 
-    int lastBits = BitLen % (sizeof(TELEM) * 8);
-
-    if (lastBits) {
-        TELEM mask = (1 << lastBits) - 1;
-        result.pMem[MemLen - 1] &= mask;
-    }
+    for (int i = BitLen; i < MemLen * sizeof(TELEM) * 8; i++) {
+        TELEM index = i / (sizeof(TELEM) * 8);
+        TELEM bit = i % (sizeof(TELEM) * 8);
+        result.pMem[index] = result.pMem[index] & ~(GetMemMask(bit));
+        }
 
     return result;
 }
