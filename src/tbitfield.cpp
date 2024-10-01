@@ -10,7 +10,7 @@
 TBitField::TBitField(int len)
 {
     BitLen = len;
-    MemLen = (len + sizeof(TELEM) - 1) / sizeof(TELEM);
+    MemLen = (len + sizeof(TELEM)*8 - 1) / sizeof(TELEM)*8;
     pMem = new TELEM[MemLen];
     for (int i = 0; i < MemLen; i++) {
         pMem[i] = 0;
@@ -157,19 +157,6 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~(void) // отрицание
 {
-    /*TBitField result(BitLen);
-
-    for (int i = 0; i < MemLen; i++)
-        result.pMem[i] = ~pMem[i];
-
-    TELEM lastBits = BitLen % (sizeof(TELEM) * 8);
-
-    if (lastBits) {
-        TELEM mask = (1 << lastBits) - TELEM(1);
-        result.pMem[MemLen - 1] &= mask;
-    }
-
-    return result;*/
 
     TBitField result(BitLen);
 
